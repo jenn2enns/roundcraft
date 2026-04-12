@@ -3929,7 +3929,7 @@
             // Show loading state
             const mainContent = document.querySelector('.main-content');
             if (mainContent) {
-                mainContent.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-muted);font-size:14px;gap:10px;"><div class="loading-spinner" style="width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;"></div>Loading shared workspace...</div>';
+                mainContent.innerHTML = '<div id="loading-overlay" style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-muted);font-size:14px;gap:10px;"><div class="loading-spinner" style="width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;"></div>Loading shared workspace...</div>';
             }
 
             // Bank listener
@@ -3983,14 +3983,7 @@
                 _firstLoadDone = true;
                 // Defer until DOM is ready (Firestore listeners can fire before DOM renders)
                 setTimeout(() => {
-                    // Hide the "Loading shared workspace..." overlay
-                    const mainContent = document.querySelector('.main-content');
-                    if (mainContent) {
-                        const loadingOverlay = mainContent.querySelector('.loading-spinner');
-                        if (loadingOverlay && loadingOverlay.parentElement) {
-                            loadingOverlay.parentElement.style.display = 'none';
-                        }
-                    }
+                    const _lo = document.getElementById('loading-overlay'); if (_lo) _lo.style.display = 'none';
                     switchPage(app.currentPage);
                     checkLocalStorageMigration();
                 }, 100);
