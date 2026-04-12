@@ -3981,8 +3981,16 @@
             const ready = app._firestoreReady;
             if (ready.bank && ready.rounds && ready.events && ready.pictureRounds && ready.musicRounds) {
                 _firstLoadDone = true;
-                // Defer switchPage until after DOM renders (Firestore listeners can fire before DOM is ready)
+                // Defer until DOM is ready (Firestore listeners can fire before DOM renders)
                 setTimeout(() => {
+                    // Hide the "Loading shared workspace..." overlay
+                    const mainContent = document.querySelector('.main-content');
+                    if (mainContent) {
+                        const loadingOverlay = mainContent.querySelector('.loading-spinner');
+                        if (loadingOverlay && loadingOverlay.parentElement) {
+                            loadingOverlay.parentElement.style.display = 'none';
+                        }
+                    }
                     switchPage(app.currentPage);
                     checkLocalStorageMigration();
                 }, 100);
@@ -7030,7 +7038,6 @@ Return ONLY valid JSON array: [{"question":"...","answer":"...","category":"..."
 
         function renderBankBrowser() {
             if (!document.getElementById('bank-browser')) return;
-            if (!document.getElementById('bank-browser')) return;
             const container = document.getElementById('bank-browser');
             const search = (document.getElementById('build-bank-search')?.value || '').toLowerCase();
             const activeFilter = document.querySelector('.build-filter-pill.active')?.dataset?.bf || 'all';
@@ -7902,7 +7909,6 @@ Return ONLY valid JSON array: [{"question":"...","answer":"...","category":"..."
         }
 
         function renderSavedMusicRounds() {
-            if (!document.getElementById('music-saved-list')) return;
             if (!document.getElementById('music-saved-list')) return;
             const container = document.getElementById('music-saved-list');
             if (!app.musicRounds || app.musicRounds.length === 0) {
