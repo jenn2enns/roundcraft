@@ -3981,9 +3981,11 @@
             const ready = app._firestoreReady;
             if (ready.bank && ready.rounds && ready.events && ready.pictureRounds && ready.musicRounds) {
                 _firstLoadDone = true;
-                // Restore the page content by re-switching to current page
-                switchPage(app.currentPage);
-                checkLocalStorageMigration();
+                // Defer switchPage until after DOM renders (Firestore listeners can fire before DOM is ready)
+                setTimeout(() => {
+                    switchPage(app.currentPage);
+                    checkLocalStorageMigration();
+                }, 0);
             }
         }
 
@@ -7367,6 +7369,7 @@ Return ONLY valid JSON array: [{"question":"...","answer":"...","category":"..."
 
         function renderRoundsSelector() {
             const selector = document.getElementById('rounds-selector');
+            if (!selector) return;
             if (app.rounds.length === 0) {
                 selector.innerHTML = '<span style="color: var(--text-muted); font-size: 13px;">No rounds saved yet. Build one below.</span>';
                 return;
@@ -7596,6 +7599,7 @@ Return ONLY valid JSON array: [{"question":"...","answer":"...","category":"..."
 
         function renderSavedPictureRounds() {
             const container = document.getElementById('picture-saved-list');
+            if (!container) return;
             if (app.pictureRounds.length === 0) {
                 container.innerHTML = '<p style="color: var(--text-muted); font-size: 13px;">No saved picture rounds</p>';
                 return;
@@ -9014,10 +9018,11 @@ Return ONLY valid JSON array: [{"question":"...","answer":"...","category":"..."
             const starred = app.bank.filter(q => q.starred).length;
             const unverified = app.bank.filter(q => !q.verified).length;
 
-            document.getElementById('stat-total').textContent = total;
-            document.getElementById('stat-unused').textContent = unused;
-            document.getElementById('stat-starred').textContent = starred;
-            document.getElementById('stat-unverified').textContent = unverified;
+            const set = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+            set('stat-total', total);
+            set('stat-unused', unused);
+            set('stat-starred', starred);
+            set('stat-unverified', unverified);
         }
 
         function showToast(message, type = 'info') {
