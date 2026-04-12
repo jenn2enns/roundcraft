@@ -7030,6 +7030,7 @@ Return ONLY valid JSON array: [{"question":"...","answer":"...","category":"..."
 
         function renderBankBrowser() {
             if (!document.getElementById('bank-browser')) return;
+            if (!document.getElementById('bank-browser')) return;
             const container = document.getElementById('bank-browser');
             const search = (document.getElementById('build-bank-search')?.value || '').toLowerCase();
             const activeFilter = document.querySelector('.build-filter-pill.active')?.dataset?.bf || 'all';
@@ -7901,6 +7902,7 @@ Return ONLY valid JSON array: [{"question":"...","answer":"...","category":"..."
         }
 
         function renderSavedMusicRounds() {
+            if (!document.getElementById('music-saved-list')) return;
             if (!document.getElementById('music-saved-list')) return;
             const container = document.getElementById('music-saved-list');
             if (!app.musicRounds || app.musicRounds.length === 0) {
