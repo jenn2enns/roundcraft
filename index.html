@@ -4149,7 +4149,8 @@
 
         function switchPage(page) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(page).classList.add('active');
+            const _pageEl = document.getElementById(page);
+            if (_pageEl) _pageEl.classList.add('active');
 
             document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             document.querySelector(`[data-page="${page}"]`).classList.add('active');
@@ -7028,6 +7029,7 @@ Return ONLY valid JSON array: [{"question":"...","answer":"...","category":"..."
         }
 
         function renderBankBrowser() {
+            if (!document.getElementById('bank-browser')) return;
             const container = document.getElementById('bank-browser');
             const search = (document.getElementById('build-bank-search')?.value || '').toLowerCase();
             const activeFilter = document.querySelector('.build-filter-pill.active')?.dataset?.bf || 'all';
@@ -7899,6 +7901,7 @@ Return ONLY valid JSON array: [{"question":"...","answer":"...","category":"..."
         }
 
         function renderSavedMusicRounds() {
+            if (!document.getElementById('music-saved-list')) return;
             const container = document.getElementById('music-saved-list');
             if (!app.musicRounds || app.musicRounds.length === 0) {
                 container.innerHTML = '<p style="color: var(--text-muted); font-size: 13px;">No saved music rounds</p>';
